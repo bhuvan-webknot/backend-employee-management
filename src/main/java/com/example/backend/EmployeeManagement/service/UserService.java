@@ -7,6 +7,9 @@ import com.example.backend.EmployeeManagement.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,8 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     final static Logger logger = LoggerFactory.getLogger(TimesheetService.class);
     public List<User> fetchAllUsers(){
@@ -24,7 +29,8 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-        return (User) userRepository.save(user);
+        user.setUserPassword(this.passwordEncoder.encode(user.getUserPassword()));
+        return this.userRepository.save(user);
     }
 
     public User fetchUserById(Long Id) throws UserNotFoundException {

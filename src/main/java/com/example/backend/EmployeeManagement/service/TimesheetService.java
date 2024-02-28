@@ -4,11 +4,14 @@ package com.example.backend.EmployeeManagement.service;
 import com.example.backend.EmployeeManagement.exception.TimesheetNotFoundException;
 import com.example.backend.EmployeeManagement.models.Timesheet;
 import com.example.backend.EmployeeManagement.repository.TimesheetRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,6 +23,11 @@ public class TimesheetService {
     TimesheetRepository timesheetRepository;
 
     final static Logger logger = LoggerFactory.getLogger(TimesheetService.class);
+
+    @RequestMapping(value="/")
+    public void redirect(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/swagger-ui.html");
+    }
 
     //Creates a entry in the db
     public Timesheet saveTimesheet(Timesheet timesheet) {
