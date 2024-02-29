@@ -24,7 +24,7 @@ public class TimesheetController {
 
 
     @GetMapping("/timesheet/{id}")
-    public ResponseEntity<Timesheet> fetchTimesheetById(@PathVariable Long id) throws TimesheetNotFoundException {
+    public ResponseEntity<Timesheet> fetchTimesheetById(@PathVariable Long id) {
         return new ResponseEntity<>(timesheetService.fetchTimesheetById(id), HttpStatusCode.valueOf(200));
     }
 
@@ -34,12 +34,12 @@ public class TimesheetController {
     }
 
     @PutMapping("/update-timesheet/{id}")
-    public ResponseEntity<Timesheet> updateTimesheet(@PathVariable("id") Long Id, @RequestBody Timesheet timesheet) throws TimesheetNotFoundException {
+    public ResponseEntity<Timesheet> updateTimesheet(@PathVariable("id") Long Id, @RequestBody Timesheet timesheet) {
         return new ResponseEntity<>(timesheetService.updateTimesheet(Id,timesheet), HttpStatusCode.valueOf(200));
     }
 
     @DeleteMapping("/delete-timesheet/{id}")
-    public ResponseEntity<String> deleteTimesheet(@PathVariable Long id) throws TimesheetNotFoundException{
+    public ResponseEntity<String> deleteTimesheet(@PathVariable Long id){
         return new ResponseEntity<>(timesheetService.deleteTimesheet(id), HttpStatusCode.valueOf(200));
     }
 }

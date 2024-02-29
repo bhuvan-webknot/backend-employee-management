@@ -25,12 +25,12 @@ public class EmployeeController {
 
 
     @GetMapping("/employee/{id}")
-    public ResponseEntity<Employee> fetchEmployeeById(@PathVariable Long id) throws EmployeeNotFoundException {
+    public ResponseEntity<Employee> fetchEmployeeById(@PathVariable Long id) {
         return new ResponseEntity<>(employeeService.fetchEmployeeById(id),HttpStatusCode.valueOf(200));
     }
 
     @PostMapping("/create-employee")
-    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) throws EmployeeAlreadyExistsException {
+    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee){
         if (employeeService.isEmployeeExists(employee.getEmpEmail())) {
             throw new EmployeeAlreadyExistsException("Employee with the same email already exists !!");
         }
@@ -38,12 +38,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/update-employee/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable("id") Long Id,@RequestBody Employee employee) throws EmployeeNotFoundException {
+    public ResponseEntity<Employee> updateEmployee(@PathVariable("id") Long Id,@RequestBody Employee employee)  {
         return new ResponseEntity<>(employeeService.updateEmployee(Id,employee),HttpStatusCode.valueOf(200));
     }
 
     @DeleteMapping("/delete-employee/{id}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) throws EmployeeNotFoundException{
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id){
         return new ResponseEntity<>(employeeService.deleteEmployee(id),HttpStatusCode.valueOf(200));
     }
 }

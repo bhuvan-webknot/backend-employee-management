@@ -4,20 +4,17 @@ package com.example.backend.EmployeeManagement.service;
 import com.example.backend.EmployeeManagement.exception.EmployeeNotFoundException;
 import com.example.backend.EmployeeManagement.models.Employee;
 import com.example.backend.EmployeeManagement.repository.EmployeeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 @Service
+@Slf4j
 public class EmployeeService {
     @Autowired
     EmployeeRepository employeeRepository;
-    final static Logger logger = LoggerFactory.getLogger(EmployeeService.class);
 
     //Creates a entry in the db
     public Employee saveEmployee(Employee employee) {
@@ -31,12 +28,9 @@ public class EmployeeService {
     }
 
     //Get an employee based on id
-    public Employee fetchEmployeeById(Long Id) throws EmployeeNotFoundException {
-        Optional<Employee> employeeRecord = employeeRepository.findById(Id);
-        if(!employeeRecord.isPresent()){
-            throw new EmployeeNotFoundException("Employee with id:"+Id+" not found !!");
-        }
-        return employeeRecord.get();
+    public Employee fetchEmployeeById(Long Id) {
+        return employeeRepository.findById(Id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Timesheet with ID : " +Id+" not found"));
     }
 
     //Checks for duplicate email id's
@@ -45,57 +39,49 @@ public class EmployeeService {
     }
 
     //Update a record :
-    public Employee updateEmployee(Long empId, Employee employee) throws EmployeeNotFoundException {
-        Optional<Employee> isExisting = employeeRepository.findById(empId);
-
-        if (!isExisting.isPresent()) {
-            throw new EmployeeNotFoundException("Employee with id:"+empId+" not found !!");
-        }
-
-        Employee empDB = isExisting.get();
+    public Employee updateEmployee(Long empId, Employee employee) {
+        Employee existingRecord = employeeRepository.findById(empId)
+                .orElseThrow(() -> new EmployeeNotFoundException("Timesheet with ID : " +empId+" not found"));
 
         if(Objects.nonNull(employee.getEmpName()) &&
                 !"".equalsIgnoreCase(employee.getEmpName())) {
-            empDB.setEmpName(employee.getEmpName());
+            existingRecord.setEmpName(employee.getEmpName());
         }
 
         if(Objects.nonNull(employee.getEmpEmail()) &&
                 !"".equalsIgnoreCase(employee.getEmpEmail())) {
-            empDB.setEmpEmail(employee.getEmpEmail());
+            existingRecord.setEmpEmail(employee.getEmpEmail());
         }
 
         if(Objects.nonNull(employee.getEmpPhone()) &&
                 !"".equalsIgnoreCase(employee.getEmpPhone())) {
-            empDB.setEmpPhone(employee.getEmpPhone());
+            existingRecord.setEmpPhone(employee.getEmpPhone());
         }
 
         if(Objects.nonNull(employee.getEmpRole()) &&
                 !"".equalsIgnoreCase(employee.getEmpRole())) {
-            empDB.setEmpRole(employee.getEmpRole());
+            existingRecord.setEmpRole(employee.getEmpRole());
         }
 
         if(Objects.nonNull(employee.getEmpDesignation()) &&
                 !"".equalsIgnoreCase(employee.getEmpDesignation())) {
-            empDB.setEmpDesignation(employee.getEmpDesignation());
+            existingRecord.setEmpDesignation(employee.getEmpDesignation());
         }
 
-        if(Objects.nonNull(employee.getSalary()) &&
-                !"".equalsIgnoreCase(String.valueOf(employee.getSalary()))) {
-            empDB.setSalary(Double.parseDouble(String.valueOf((employee.getSalary()))));
+        if(!"".equalsIgnoreCase(String.valueOf(employee.getSalary()))) {
+            existingRecord.setSalary(Double.parseDouble(String.valueOf((employee.getSalary()))));
         }
 
-        logger.info("Successfully updated the record !!");
+        log.info("Successfully updated the record !!");
 
-        return employeeRepository.save(empDB);
+        return employeeRepository.save(existingRecord);
     }
 
     //Delete a record from the table
-    public String deleteEmployee(Long Id) throws EmployeeNotFoundException {
-        Optional<Employee> employeeRecord = employeeRepository.findById(Id);
-        if(!employeeRecord.isPresent()){
-            throw new EmployeeNotFoundException("Employee with id:"+Id+" not found !!");
-        }
-        logger.info("Successfully deleted the record !!");
+    public String deleteEmployee(Long Id) {
+        employeeRepository.findById(Id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Timesheet with ID : " +Id+" not found"));
+        log.info("Successfully deleted the record !!");
         employeeRepository.deleteById(Id);
         return ("Employee with id:"+Id+" successfully deleted !!");
     }
