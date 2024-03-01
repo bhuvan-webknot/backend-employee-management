@@ -50,8 +50,8 @@ public class EmployeeController {
 
     @GetMapping("/sort={field}")
     private ResponseEntity<List<Employee>> getEmployeesWithSort(@PathVariable String field) {
-        List<Employee> allProducts = employeeService.returnEmployeesWithSorting(field);
-        return new ResponseEntity<>(allProducts,HttpStatusCode.valueOf(200));
+        List<Employee> allEmployees = employeeService.returnEmployeesWithSorting(field);
+        return new ResponseEntity<>(allEmployees,HttpStatusCode.valueOf(200));
     }
 
     @GetMapping("/page={offset}/limit={pageSize}")

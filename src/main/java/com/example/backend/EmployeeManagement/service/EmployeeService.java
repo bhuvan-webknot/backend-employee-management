@@ -6,6 +6,9 @@ import com.example.backend.EmployeeManagement.models.Employee;
 import com.example.backend.EmployeeManagement.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -26,14 +29,16 @@ public class EmployeeService {
 
 
     //Returns all the employees present in the database
+    @Cacheable("employees")
     public List<Employee> fetchAllEmployees(){
         return employeeRepository.findAll();
     }
 
     //Get an employee based on id
-    public Employee fetchEmployeeById(Long Id) {
-        return employeeRepository.findById(Id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Timesheet with ID : " +Id+" not found"));
+    @Cacheable(value = "employeeWithId",key = "#id")
+    public Employee fetchEmployeeById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Timesheet with ID : " +id+" not found"));
     }
 
     //Checks for duplicate email id's
@@ -42,9 +47,12 @@ public class EmployeeService {
     }
 
     //Update a record :
-    public Employee updateEmployee(Long empId, Employee employee) {
-        Employee existingRecord = employeeRepository.findById(empId)
-                .orElseThrow(() -> new EmployeeNotFoundException("Timesheet with ID : " +empId+" not found"));
+
+    @CachePut(value = "employeeWithId",key = "#id")
+    @CacheEvict(cacheNames = "employees")
+    public Employee updateEmployee(Long id, Employee employee) {
+        Employee existingRecord = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Timesheet with ID : " +id+" not found"));
 
         if(Objects.nonNull(employee.getEmpName()) &&
                 !"".equalsIgnoreCase(employee.getEmpName())) {
@@ -91,12 +99,13 @@ public class EmployeeService {
     }
 
     //Delete a record from the table
-    public String deleteEmployee(Long Id) {
-        employeeRepository.findById(Id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Timesheet with ID : " +Id+" not found"));
+    @CacheEvict(cacheNames = "employeeWithId", key = "#id",allEntries = true)
+    public String deleteEmployee(Long id) {
+        employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Timesheet with ID : " +id+" not found"));
         log.info("Successfully deleted the record !!");
-        employeeRepository.deleteById(Id);
-        return ("Employee with id:"+Id+" successfully deleted !!");
+        employeeRepository.deleteById(id);
+        return ("Employee with id:"+id+" successfully deleted !!");
     }
 
 
