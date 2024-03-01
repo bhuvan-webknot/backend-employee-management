@@ -5,38 +5,41 @@ import com.example.backend.EmployeeManagement.exception.TimesheetNotFoundExcepti
 import com.example.backend.EmployeeManagement.models.Timesheet;
 import com.example.backend.EmployeeManagement.service.TimesheetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1/")
 public class TimesheetController {
     @Autowired
     private TimesheetService timesheetService;
 
-    @GetMapping("/api/v1/list-timesheet")
-    public List<Timesheet> fetchTimesheetList() {
-        return timesheetService.fetchAllTimesheets();
+    @GetMapping("/list-timesheet")
+    public ResponseEntity<List<Timesheet>> fetchTimesheetList() {
+        return new ResponseEntity<>(timesheetService.fetchAllTimesheets(),HttpStatusCode.valueOf(200));
     }
 
 
-    @GetMapping("/api/v1/timesheet/{id}")
-    public Timesheet fetchTimesheetById(@PathVariable Long id) throws TimesheetNotFoundException {
-        return timesheetService.fetchTimesheetById(id);
+    @GetMapping("/timesheet/{id}")
+    public ResponseEntity<Timesheet> fetchTimesheetById(@PathVariable Long id) {
+        return new ResponseEntity<>(timesheetService.fetchTimesheetById(id), HttpStatusCode.valueOf(200));
     }
 
-    @PostMapping("/api/v1/create-timesheet")
-    public Timesheet saveTimesheet(@RequestBody Timesheet timesheet) {
-        return timesheetService.saveTimesheet(timesheet);
+    @PostMapping("/create-timesheet")
+    public ResponseEntity<Timesheet> saveTimesheet(@RequestBody Timesheet timesheet) {
+        return new ResponseEntity<>(timesheetService.saveTimesheet(timesheet),HttpStatusCode.valueOf(200));
     }
 
-    @PutMapping("/api/v1/update-timesheet/{id}")
-    public Timesheet updateTimesheet(@PathVariable("id") Long Id,@RequestBody Timesheet timesheet) throws TimesheetNotFoundException {
-        return timesheetService.updateTimesheet(Id,timesheet);
+    @PutMapping("/update-timesheet/{id}")
+    public ResponseEntity<Timesheet> updateTimesheet(@PathVariable("id") Long Id, @RequestBody Timesheet timesheet) {
+        return new ResponseEntity<>(timesheetService.updateTimesheet(Id,timesheet), HttpStatusCode.valueOf(200));
     }
 
-    @DeleteMapping("/api/v1/delete-timesheet/{id}")
-    public String deleteTimesheet(@PathVariable Long id) throws TimesheetNotFoundException{
-        return timesheetService.deleteTimesheet(id);
+    @DeleteMapping("/delete-timesheet/{id}")
+    public ResponseEntity<String> deleteTimesheet(@PathVariable Long id){
+        return new ResponseEntity<>(timesheetService.deleteTimesheet(id), HttpStatusCode.valueOf(200));
     }
 }

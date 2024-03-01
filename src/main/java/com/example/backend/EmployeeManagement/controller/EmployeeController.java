@@ -6,41 +6,44 @@ import com.example.backend.EmployeeManagement.exception.EmployeeNotFoundExceptio
 import com.example.backend.EmployeeManagement.models.Employee;
 import com.example.backend.EmployeeManagement.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1/")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping("/api/v1/list-employees")
-    public List<Employee> fetchEmployeeList() {
-        return employeeService.fetchAllEmployees();
+    @GetMapping("/list-employees")
+    public ResponseEntity<List<Employee>> fetchEmployeeList() {
+        return new ResponseEntity<>(employeeService.fetchAllEmployees(), HttpStatusCode.valueOf(200));
     }
 
 
-    @GetMapping("/api/v1/employee/{id}")
-    public Employee fetchEmployeeById(@PathVariable Long id) throws EmployeeNotFoundException {
-        return employeeService.fetchEmployeeById(id);
+    @GetMapping("/employee/{id}")
+    public ResponseEntity<Employee> fetchEmployeeById(@PathVariable Long id) {
+        return new ResponseEntity<>(employeeService.fetchEmployeeById(id),HttpStatusCode.valueOf(200));
     }
 
-    @PostMapping("/api/v1/create-employee")
-    public Employee saveEmployee(@RequestBody Employee employee) throws EmployeeAlreadyExistsException {
+    @PostMapping("/create-employee")
+    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee){
         if (employeeService.isEmployeeExists(employee.getEmpEmail())) {
             throw new EmployeeAlreadyExistsException("Employee with the same email already exists !!");
         }
-        return employeeService.saveEmployee(employee);
+        return new ResponseEntity<>(employeeService.saveEmployee(employee),HttpStatusCode.valueOf(200));
     }
 
-    @PutMapping("/api/v1/update-employee/{id}")
-    public Employee updateEmployee(@PathVariable("id") Long Id,@RequestBody Employee employee) throws EmployeeNotFoundException {
-        return employeeService.updateEmployee(Id,employee);
+    @PutMapping("/update-employee/{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable("id") Long Id,@RequestBody Employee employee)  {
+        return new ResponseEntity<>(employeeService.updateEmployee(Id,employee),HttpStatusCode.valueOf(200));
     }
 
-    @DeleteMapping("/api/v1/delete-employee/{id}")
-    public String deleteEmployee(@PathVariable Long id) throws EmployeeNotFoundException{
-        return employeeService.deleteEmployee(id);
+    @DeleteMapping("/delete-employee/{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id){
+        return new ResponseEntity<>(employeeService.deleteEmployee(id),HttpStatusCode.valueOf(200));
     }
 }
