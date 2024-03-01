@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,8 +24,10 @@ public class Employee {
     private String empName;
     private String empRole;
     private String empPhone;
+    private String empDept;
     @Column(unique = true)
     private String empEmail;
-    private String empDesignation;
     private double salary;
+    private Date startingDate;
+    private Date leavingDate;
 }
