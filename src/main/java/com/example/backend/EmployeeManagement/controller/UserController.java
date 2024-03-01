@@ -1,16 +1,12 @@
 package com.example.backend.EmployeeManagement.controller;
 
-
-import com.example.backend.EmployeeManagement.models.Employee;
 import com.example.backend.EmployeeManagement.models.UserEmployee;
 import com.example.backend.EmployeeManagement.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -36,9 +32,9 @@ public class UserController {
     }
 
     @PutMapping("/update-user/{id}")
-    public ResponseEntity<UserEmployee> updateUser(@PathVariable("id") Long Id, @RequestBody UserEmployee userEmployee){
+    public ResponseEntity<UserEmployee> updateUser(@PathVariable("id") Long Id, @RequestBody UserEmployee userEmployee) {
         return new ResponseEntity<>(userService.updateUser(Id, userEmployee), HttpStatusCode.valueOf(200));
-
+    }
 
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id){

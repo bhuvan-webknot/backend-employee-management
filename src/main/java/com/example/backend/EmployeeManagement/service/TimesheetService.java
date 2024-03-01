@@ -2,9 +2,7 @@ package com.example.backend.EmployeeManagement.service;
 
 
 import com.example.backend.EmployeeManagement.exception.TimesheetNotFoundException;
-import com.example.backend.EmployeeManagement.exception.UserNotFoundException;
 import com.example.backend.EmployeeManagement.models.Timesheet;
-import com.example.backend.EmployeeManagement.models.User;
 import com.example.backend.EmployeeManagement.repository.TimesheetRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
