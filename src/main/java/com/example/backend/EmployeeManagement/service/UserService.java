@@ -21,6 +21,7 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     public List<UserEmployee> fetchAllUsers(){
         return userRepository.findAll();
     }

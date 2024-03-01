@@ -14,23 +14,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+
 @RequestMapping("/api/v1/employee")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
-
     @GetMapping("/list")
     public ResponseEntity<List<Employee>> fetchEmployeeList() {
         return new ResponseEntity<>(employeeService.fetchAllEmployees(), HttpStatusCode.valueOf(200));
     }
 
-
     @GetMapping("/{id}")
+
     public ResponseEntity<Employee> fetchEmployeeById(@PathVariable Long id) {
         return new ResponseEntity<>(employeeService.fetchEmployeeById(id),HttpStatusCode.valueOf(200));
     }
 
     @PostMapping("/create")
+
     public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee){
         if (employeeService.isEmployeeExists(employee.getEmpEmail())) {
             throw new EmployeeAlreadyExistsException("Employee with the same email already exists !!");
@@ -38,10 +39,14 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.saveEmployee(employee),HttpStatusCode.valueOf(200));
     }
 
+
     @PutMapping("/update/{id}")
+
+
     public ResponseEntity<Employee> updateEmployee(@PathVariable("id") Long Id,@RequestBody Employee employee)  {
         return new ResponseEntity<>(employeeService.updateEmployee(Id,employee),HttpStatusCode.valueOf(200));
     }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable Long id){

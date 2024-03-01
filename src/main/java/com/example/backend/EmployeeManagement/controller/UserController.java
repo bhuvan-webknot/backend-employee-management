@@ -18,8 +18,7 @@ import java.util.List;
 public class UserController {
     @Autowired
     UserService userService;
-
-
+  
     @GetMapping("/list-user")
     public ResponseEntity<List<UserEmployee>> fetchUserList() {
         return new ResponseEntity<>(userService.fetchAllUsers(), HttpStatusCode.valueOf(200));
@@ -39,7 +38,7 @@ public class UserController {
     @PutMapping("/update-user/{id}")
     public ResponseEntity<UserEmployee> updateUser(@PathVariable("id") Long Id, @RequestBody UserEmployee userEmployee){
         return new ResponseEntity<>(userService.updateUser(Id, userEmployee), HttpStatusCode.valueOf(200));
-    }
+
 
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id){
