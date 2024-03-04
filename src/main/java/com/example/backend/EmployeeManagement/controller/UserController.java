@@ -13,33 +13,33 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/user")
 public class UserController {
     @Autowired
     UserService userService;
   
-    @GetMapping("/list-user")
+    @GetMapping("/list")
     public ResponseEntity<List<UserEmployee>> fetchUserList() {
         return new ResponseEntity<>(userService.fetchAllUsers(), HttpStatusCode.valueOf(200));
     }
 
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserEmployee> fetchUserById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.fetchUserById(id), HttpStatusCode.valueOf(200));
     }
 
-    @PostMapping("/create-user")
+    @PostMapping("/create")
     public ResponseEntity<UserEmployee> saveUser(@RequestBody UserEmployee userEmployee) {
         return new ResponseEntity<>(userService.saveUser(userEmployee), HttpStatusCode.valueOf(200));
     }
 
-    @PutMapping("/update-user/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<UserEmployee> updateUser(@PathVariable("id") Long Id, @RequestBody UserEmployee userEmployee) {
         return new ResponseEntity<>(userService.updateUser(Id, userEmployee), HttpStatusCode.valueOf(200));
     }
 
-    @DeleteMapping("/delete-user/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id){
         return new ResponseEntity<String>(userService.deleteUser(id), HttpStatusCode.valueOf(200));
     }

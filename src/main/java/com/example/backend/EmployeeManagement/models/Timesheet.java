@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 
-public class Timesheet {
+public class Timesheet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long timesheetId;
